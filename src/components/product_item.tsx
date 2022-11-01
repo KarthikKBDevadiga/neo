@@ -74,7 +74,7 @@ const Product :FC<ProductProps>=(props):JSX.Element=>{
         flex:1
       }}>
         <Text style={{color:'black', fontSize:16, fontWeight:'600'}}>{props.name}</Text>
-        <Text style={{fontSize:12}}>{props.producer}</Text>
+        <Text style={{fontSize:12, color:'gray'}}>{props.producer}</Text>
         <Text style={{color:'red', fontSize:16 , fontWeight:'bold'}}>Rs. {props.cost}</Text>
     </View>
     <TouchableOpacity onPress={() => {

@@ -78,7 +78,7 @@ const ProductDetailsScreen :FC=(props)=>{
     
 
   }
-  return <View>
+  return <ScrollView>
     <View style={{
       paddingHorizontal:16,
       paddingVertical:16,
@@ -133,7 +133,7 @@ const ProductDetailsScreen :FC=(props)=>{
         <View style={{flexDirection:'row', marginTop:16}}>
           <View style={{flex:1}}>
             <Text style={{color:'black', fontWeight:'bold', fontSize:18}}>{product.name}</Text>
-            <Text style={{ fontSize:14}}>{product.producer}</Text>
+            <Text style={{ fontSize:14,color:'gray'}}>{product.producer}</Text>
           </View>
           <TouchableOpacity onPress={()=>{
             toggleFav();
@@ -156,11 +156,11 @@ const ProductDetailsScreen :FC=(props)=>{
           <Text style={{color:'red', fontSize:16, fontWeight:'bold'}}>Rs. {product.cost}</Text>
           <Text style={{color:'red', fontSize:16, fontWeight:'bold', }}>Rating. {product.rating}</Text>
         </View>
-        <Text style={{fontSize:16, marginTop:8  }}>Rating. {product.description}</Text>
+        <Text style={{fontSize:16, marginTop:8 ,color:'gray' }}>{product.description}</Text>
       </View>
     }
    
-  </View>
+  </ScrollView>
 }
 
 export default ProductDetailsScreen;
