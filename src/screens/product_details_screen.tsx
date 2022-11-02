@@ -1,10 +1,12 @@
 import {FC, useEffect, useState} from 'react';
-import { Dimensions, Image, ScrollView, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, StatusBar, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 
 import Realm from 'realm';
 import ProductModel from '../model/product_model';
 import ProductImageModel from  '../model/product_image_model';
 import ProductService from '../services/product_service';
+import Loading from '../components/loading';
+import { useNavigation } from '@react-navigation/native';
 
 const ProductDetailsScreen :FC=(props)=>{
   const [product, setProduct] = useState<ProductModel>();
@@ -16,7 +18,11 @@ const ProductDetailsScreen :FC=(props)=>{
     path: 'neo.realm'
   });
   const productService = new ProductService();
+  const [loading, setLoading] = useState(false)
+  const navigation = useNavigation();
+
   useEffect(()=>{
+    setLoading(true)
 
     productService.getProduct(route.params.productId).then((p:any)=>{
       console.log(p);
@@ -29,6 +35,7 @@ const ProductDetailsScreen :FC=(props)=>{
       if(already.length>0){
         setFav(true);
       }
+      setLoading(false)
     }).catch(error => console.log('error', error));
     
     
@@ -79,14 +86,25 @@ const ProductDetailsScreen :FC=(props)=>{
 
   }
   return <ScrollView>
+    <StatusBar
+      backgroundColor="#E57373"
+      barStyle="light-content"
+    />
     <View style={{
       paddingHorizontal:16,
       paddingVertical:16,
-      backgroundColor:'red'
+      backgroundColor:'red',
+      flexDirection:'row'
     }}>
+      <TouchableOpacity onPress={()=>{
+        navigation.goBack();
+      }}>
+        <Image source={require('../../assets/back.png')}  style={{ width:32, height:32, marginRight:16}}/>
+      </TouchableOpacity>
       
-      <Text style={{color:'white', fontWeight:'bold', fontSize:16, textAlign:'center'}}>Products Details</Text>
+      <Text style={{color:'white', fontWeight:'bold', fontSize:20, textAlign:'center'}}>Products Details</Text>
     </View>
+
 
     
     {
@@ -142,14 +160,6 @@ const ProductDetailsScreen :FC=(props)=>{
               <Image source={fav?require('../../assets/heart_filled.png'):require('../../assets/heart.png')}  style={{ width:32, height:32}}/>
             </View>
           </TouchableOpacity>
-          {/* <TouchableNativeFeedback
-            background={TouchableNativeFeedback.Ripple('#90CAF9', false)}
-            onPress={() => {
-            }}>
-              <View style={{ height:32, width:32,}}>
-                <Image source={fav?require('../../assets/heart_filled.png'):require('../../assets/heart.png')}  style={{ width:32, height:32}}/>
-              </View>
-          </TouchableNativeFeedback> */}
         </View>
       
         <View style={{flexDirection:'row',justifyContent:'space-between', marginTop:8  }}>
@@ -158,6 +168,10 @@ const ProductDetailsScreen :FC=(props)=>{
         </View>
         <Text style={{fontSize:16, marginTop:8 ,color:'gray' }}>{product.description}</Text>
       </View>
+    }
+
+    {
+      loading && <Loading/>
     }
    
   </ScrollView>

@@ -1,8 +1,9 @@
 
 import {CommonActions, useIsFocused, useNavigation} from '@react-navigation/native';
 import {FC, useEffect, useState} from 'react';
-import {View, ScrollView, Text, TouchableNativeFeedback, Image} from 'react-native';
+import {View, ScrollView, Text, TouchableNativeFeedback, Image, StatusBar, ProgressBarAndroid} from 'react-native';
 import Header from '../components/header';
+import Loading from '../components/loading';
 import Product from '../components/product_item';
 import ProductService from '../services/product_service';
 
@@ -10,6 +11,7 @@ const HomeScreen =()=>{
   const [products, setProducts] = useState([]);
   const productService = new ProductService();
   let currentPage = 1;
+  const [loading, setLoading] = useState(false)
   
 
   const isFocused = useIsFocused();
@@ -21,11 +23,15 @@ const HomeScreen =()=>{
     productService.getProducts(currentPage).then((a)=>{
       setProducts(a)
      }) .catch(error => console.log('error', error));
+    console.log('OInasd');
+    
   }, [isFocused]);
 
   useEffect(()=>{
+    setLoading(true);
     productService.getProducts(currentPage).then((a)=>{
       setProducts(a)
+      setLoading(false);
      }) .catch(error => console.log('error', error));
   },[])
 
@@ -49,8 +55,8 @@ const HomeScreen =()=>{
     scrollEventThrottle={400}
     >
       <View style={{flex:1}}>
+
         <Header/>
-        
         <View>
         {
           products.map((product, index)=>{
@@ -59,6 +65,9 @@ const HomeScreen =()=>{
               <View style={{ height:1, width:'100%' , backgroundColor:'lightgray', }}/>
             </View>;
           })
+        }
+        {
+          loading && <Loading/>
         }
         </View>
       </View>
